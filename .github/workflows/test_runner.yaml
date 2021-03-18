@@ -1,4 +1,4 @@
-name: your-workflow-name
+name: test_gpu
 on: [push]
 jobs:
   run:
