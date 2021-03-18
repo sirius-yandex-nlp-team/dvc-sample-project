@@ -4,3 +4,4 @@ branches:
     prefix: HYP-
   - label: task
     prefix: TASK-
+openDraftPR: true
