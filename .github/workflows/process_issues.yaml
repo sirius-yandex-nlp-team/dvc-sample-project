@@ -14,4 +14,3 @@ jobs:
         run: |
           echo $(pwd)
           echo $(ls)
-          python .github/utils/set_issue_name
