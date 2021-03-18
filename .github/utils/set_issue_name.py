@@ -66,7 +66,7 @@ def apply_changes(changes):
 
 def main():
     issue = get_issue()
-    changes = get_changes()
+    changes = get_changes(issue)
     apply_changes(changes)
 
 if __name__ == "__main__":
