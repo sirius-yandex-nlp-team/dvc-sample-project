@@ -27,10 +27,10 @@ def get_issue():
         f'https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}', 
         headers=headers, 
     )
-    return response.json
+    return response.json()
 
 def get_labels(issue):
-    return [i['name'] for i in js['labels']]
+    return [i['name'] for i in issue['labels']]
 
 def remove_title_prefix(title, prefix):
     title = title.strip()
