@@ -1,0 +1,16 @@
+name: create_issue_branch
+on:
+  issues:
+    types: [assigned]
+jobs:
+  create_issue_branch:
+    - name: create issue branch
+      uses: robvanderleek/create-issue-branch@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      branchName: '${issue.number}'
+      branches:
+        - label: hypothesis
+          prefix: HYP-
+        - label: task
+          prefix: TASK-
