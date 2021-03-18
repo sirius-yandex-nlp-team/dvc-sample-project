@@ -12,5 +12,5 @@ jobs:
           REPO: ${{ github.event.repository.name }}
           OWNER: ${{ github.event.repository.owner.login }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: |]
+        run: |
           python .github/utils/set_issue_name.py
