@@ -10,9 +10,3 @@ jobs:
         uses: robvanderleek/create-issue-branch@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        branchName: '${issue.number}'
-        branches:
-          - label: hypothesis
-            prefix: HYP-
-          - label: task
-            prefix: TASK-

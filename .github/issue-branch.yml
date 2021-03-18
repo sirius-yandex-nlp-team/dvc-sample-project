@@ -1,0 +1,6 @@
+branchName: '${issue.number}'
+branches:
+  - label: hypothesis
+    prefix: HYP-
+  - label: task
+    prefix: TASK-
