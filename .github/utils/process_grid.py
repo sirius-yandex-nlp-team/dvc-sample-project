@@ -1,5 +1,6 @@
 import yaml
 import json
+import itertools
 
 def product_dict(**kwargs):
     keys = kwargs.keys()
