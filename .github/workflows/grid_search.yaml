@@ -11,7 +11,8 @@ jobs:
         id: set-matrix
         run: python .github/utils/process_grid.py
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix:
+        params: ${{ steps.set-matrix.outputs.matrix }}
   run:
     runs-on: ubuntu-latest
     needs: read_grid
@@ -22,6 +23,6 @@ jobs:
       - name: run_cml
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          MATRIX_PARAMS: ${{ matrix.params }}
         run: |
-          echo ${{ matrix.params_one }}
-          echo ${{ matrix.params_two }}
+          echo "$MATRIX_PARAMS"
