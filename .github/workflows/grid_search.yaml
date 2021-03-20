@@ -23,6 +23,6 @@ jobs:
       - name: run_cml
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          MATRIX_PARAMS: ${{ matrix.params }}
+          MATRIX_PARAMS: "${{ matrix.params }}"
         run: |
           echo "$MATRIX_PARAMS"
