@@ -14,6 +14,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   move_project_card:
     runs-on: ubuntu-latest
+    steps:
       - name: move project card
         uses: peter-evans/create-or-update-project-card@v1
         with:
