@@ -1,0 +1,22 @@
+name: test_gpu
+
+on: push
+
+jobs:
+  read_grid:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: read yaml
+        id: set-matrix
+        run: python .github/utils/process_grid.py
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run_cml
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ${{ matrix.params_one }}
+          echo ${{ matrix.params_two }}
