@@ -9,7 +9,7 @@ def product_dict(**kwargs):
 
 def main():
     grid = yaml.load(open("grid.yaml"))
-    grid = product_dict(**grid)
+    grid = list(product_dict(**grid))
     grid_json = json.dumps(grid)
     print(f"::set-output name=matrix::{grid_json}")
 
