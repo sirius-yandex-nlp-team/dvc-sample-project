@@ -1,5 +1,7 @@
 name: test_gpu
-on: [push]
+on:
+  pull_request:
+    types: [ready_for_review]
 jobs:
   run:
     runs-on: [self-hosted,cml,gpu]
