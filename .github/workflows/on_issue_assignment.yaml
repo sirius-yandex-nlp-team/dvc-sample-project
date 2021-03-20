@@ -1,7 +1,9 @@
-name: create_issue_branch
+name: on_issue_assignment
+
 on:
   issues:
     types: [assigned]
+
 jobs:
   create_issue_branch:
     runs-on: ubuntu-latest
@@ -10,3 +12,11 @@ jobs:
         uses: robvanderleek/create-issue-branch@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  move_project_card:
+    runs-on: ubuntu-latest
+      - name: move project card
+        uses: peter-evans/create-or-update-project-card@v1
+        with:
+          project-name: Sample Board
+          column-name: In progress
+          issue-number: ${{ github.event.issue.number }}
