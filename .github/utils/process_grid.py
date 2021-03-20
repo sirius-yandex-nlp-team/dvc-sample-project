@@ -11,7 +11,7 @@ def product_dict(**kwargs):
 def main():
     grid = yaml.load(open("grid.yaml"))
     grid = list(product_dict(**grid))
-    grid_json = json.dumps(grid)
+    grid_json = json.dumps([json.dumps(i) for i in grid])
     print(f"::set-output name=matrix::{grid_json}")
 
 if __name__ == "__main__":
