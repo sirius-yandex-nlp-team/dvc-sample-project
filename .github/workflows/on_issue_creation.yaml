@@ -1,17 +1,18 @@
-name: assign_issues_and_pulls_to_project
+name: on_issue_creation
 
 on:
   issues:
-    types: [opened]
-  pull_request:
     types: [opened]
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  assign_issues_and_pulls_to_project:
+  create_project_card:
     runs-on: ubuntu-latest
     steps:
-    - uses: srggrs/assign-one-project-github-action@1.2.1
-      with:
-        project: 'https://github.com/konodyuk/dvc-sample-project/projects/1'
+      - name: create project card
+        uses: peter-evans/create-or-update-project-card@v1
+        with:
+          project-name: Sample Board
+          column-name: To do
+          issue-number: ${{ github.event.issue.number }}
