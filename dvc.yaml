@@ -32,4 +32,4 @@ stages:
     live:
       logs:
         summary: true
-        html: true
+        html: false
