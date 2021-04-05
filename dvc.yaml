@@ -27,4 +27,9 @@ stages:
     params:
     - catboost
     outs:
-    - artifacts/catboost.pkl
+    - artifacts/catboost.pkl:
+        checkpoint: true
+    live:
+      logs:
+        summary: true
+        html: true
