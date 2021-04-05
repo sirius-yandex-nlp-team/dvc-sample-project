@@ -1,0 +1,11 @@
+data:
+  n_objects: 10000
+
+
+split:
+  test_size: 0.3
+  random_state: 0
+  time_based_train_size: 0.8
+
+catboost:
+  n_estimators: 100
