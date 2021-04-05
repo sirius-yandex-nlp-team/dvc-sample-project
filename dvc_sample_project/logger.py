@@ -17,7 +17,7 @@ class Logger:
         self.kwargs = kwargs
         self.create_experiment()
 
-    def next_epoch(self):
+    def dvclive_next_step(self):
         dvclive.next_step()
 
     def log_metric(self, log_name, x, y=None, timestamp=None, dvc=False):
