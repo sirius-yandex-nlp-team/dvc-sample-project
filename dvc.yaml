@@ -18,3 +18,13 @@ stages:
     outs:
     - data/processed/test.csv
     - data/processed/train.csv
+  train_catboost:
+    cmd: python3 dvc_sample_project/trainers/train_catboost.py
+    deps:
+    - data/processed/test.csv
+    - data/processed/train.csv
+    - dvc_sample_project/trainers/train_catboost.py
+    params:
+    - catboost
+    outs:
+    - artifacts/catboost.pkl
