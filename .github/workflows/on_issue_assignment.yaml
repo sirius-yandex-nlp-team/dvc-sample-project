@@ -18,6 +18,6 @@ jobs:
       - name: move project card
         uses: peter-evans/create-or-update-project-card@v1
         with:
-          project-name: Sample Board
+          project-name: Board
           column-name: In progress
           issue-number: ${{ github.event.issue.number }}

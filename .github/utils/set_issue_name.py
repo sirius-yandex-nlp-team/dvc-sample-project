@@ -7,7 +7,7 @@ owner = os.environ['OWNER']
 issue_number = os.environ['ISSUE_NUMBER']
 
 headers = {
-    'Accept': 'application/vnd.github.v3+json',
+    'Accept': 'application/vnd.github.starfox-preview+json',
     'Authorization': f'token {token}',
 }
 

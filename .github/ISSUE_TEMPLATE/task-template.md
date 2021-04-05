@@ -1,7 +1,7 @@
 ---
 name: Task template
 about: Task issue template
-title: "[TASK] "
+title: ""
 labels: task
 assignees: ''
 

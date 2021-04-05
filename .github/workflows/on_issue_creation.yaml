@@ -3,6 +3,7 @@ name: on_issue_creation
 on:
   issues:
     types: [opened]
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -13,6 +14,6 @@ jobs:
       - name: create project card
         uses: peter-evans/create-or-update-project-card@v1
         with:
-          project-name: Sample Board
+          project-name: Board
           column-name: To do
           issue-number: ${{ github.event.issue.number }}

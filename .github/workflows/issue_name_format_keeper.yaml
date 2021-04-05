@@ -1,7 +1,9 @@
 name: process_issues
+
 on:
   issues:
     types: [opened, edited, labeled, unlabeled]
+
 jobs:
   set_issue_name:
     runs-on: ubuntu-latest
