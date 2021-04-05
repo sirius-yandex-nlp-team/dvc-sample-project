@@ -43,13 +43,17 @@ stages:
       md5: e0756a1b0d0fe5690c59c6f080d4510a
       size: 2761559
     - path: dvc_sample_project/trainers/train_catboost.py
-      md5: fe1e0c9f0be4660661921725e0715e73
-      size: 1237
+      md5: 57e4dd9ed36a03556ec6abd6fc2f8bac
+      size: 1288
     params:
       params.yaml:
         catboost:
           n_estimators: 100
     outs:
     - path: artifacts/catboost.pkl
-      md5: e430da643f7bc8b59e04f04178452d83
+      md5: 0c307901d5c3b29d0e9af2e50affe9e2
       size: 125782
+    - path: logs
+      md5: 84868fd9b5725b3cfea5ab5e07e154e2.dir
+      size: 133
+      nfiles: 2
