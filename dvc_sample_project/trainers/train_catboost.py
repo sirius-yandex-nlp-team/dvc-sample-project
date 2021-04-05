@@ -19,6 +19,7 @@ def train_catboost(train_df, test_df):
         model.fit(x_train, y_train, eval_set=[(x_train, y_train), (x_test, y_test)])
     logger.log_metric("train_accuracy", accuracy_score(y_train, model.predict(x_train)), dvc=True)
     logger.log_metric("test_accuracy", accuracy_score(y_test, model.predict(x_test)), dvc=True)
+    logger.dvclive_next_step()
     return model
 
 if __name__ == "__main__":
