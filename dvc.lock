@@ -1,0 +1,15 @@
+schema: '2.0'
+stages:
+  generate_data:
+    cmd: python3 dvc_sample_project/data/generate_data.py
+    deps:
+    - path: dvc_sample_project/data/generate_data.py
+      md5: b41e80e9139529a945b76f9053c3c6d2
+      size: 508
+    params:
+      params.yaml:
+        data.n_objects: 10000
+    outs:
+    - path: data/raw/data.csv
+      md5: 9c33181b6d728277e11a8dc1542f4408
+      size: 3953922

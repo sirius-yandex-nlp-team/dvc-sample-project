@@ -1,0 +1,9 @@
+stages:
+  generate_data:
+    cmd: python3 dvc_sample_project/data/generate_data.py
+    deps:
+    - dvc_sample_project/data/generate_data.py
+    params:
+    - data.n_objects
+    outs:
+    - data/raw/data.csv
