@@ -13,3 +13,23 @@ stages:
     - path: data/raw/data.csv
       md5: 9c33181b6d728277e11a8dc1542f4408
       size: 3953922
+  split_data:
+    cmd: python3 dvc_sample_project/features/split_data.py
+    deps:
+    - path: data/raw/data.csv
+      md5: 9c33181b6d728277e11a8dc1542f4408
+      size: 3953922
+    - path: dvc_sample_project/features/split_data.py
+      md5: 16674c553ecced200ebb0f86799ec41f
+      size: 634
+    params:
+      params.yaml:
+        split.random_state: 0
+        split.test_size: 0.3
+    outs:
+    - path: data/processed/test.csv
+      md5: abfbfb651480994e8126d01e38a4ae45
+      size: 1183514
+    - path: data/processed/train.csv
+      md5: e0756a1b0d0fe5690c59c6f080d4510a
+      size: 2761559

@@ -7,3 +7,14 @@ stages:
     - data.n_objects
     outs:
     - data/raw/data.csv
+  split_data:
+    cmd: python3 dvc_sample_project/features/split_data.py
+    deps:
+    - data/raw/data.csv
+    - dvc_sample_project/features/split_data.py
+    params:
+    - split.random_state
+    - split.test_size
+    outs:
+    - data/processed/test.csv
+    - data/processed/train.csv
