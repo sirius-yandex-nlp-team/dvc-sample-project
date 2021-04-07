@@ -5,6 +5,7 @@ import numpy as np
 import pickle
 import scipy.sparse as sparse
 import yaml
+import re
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -20,9 +21,12 @@ if len(sys.argv) != 3 and len(sys.argv) != 5:
     )
     sys.exit(1)
 
-train_input = os.path.join(sys.argv[1], 'train.tsv')
-test_input = os.path.join(sys.argv[1], 'test.tsv')
+train_input = os.path.join(sys.argv[1], 'train.csv')
+dev_input = os.path.join(sys.argv[1], 'dev.csv')
+test_input = os.path.join(sys.argv[1], 'test.csv')
+
 train_output = os.path.join(sys.argv[2], 'train.pkl')
+dev_output = os.path.join(sys.argv[2], 'dev.pkl')
 test_output = os.path.join(sys.argv[2], 'test.pkl')
 
 max_features = params['max_features']
@@ -35,17 +39,38 @@ def get_df(data):
         encoding='utf-8',
         header=None,
         delimiter='\t',
-        names=['id', 'label', 'text']
+        names=['id', 'original', 'edit', 'scores', 'meanGrade']
     )
     sys.stderr.write(f'The input data frame {data} size is {df.shape}\n')
     return df
 
 
-def save_matrix(df, matrix, output):
-    id_matrix = sparse.csr_matrix(df.id.astype(np.int64)).T
-    label_matrix = sparse.csr_matrix(df.label.astype(np.int64)).T
+def replace_anchors(original, edit):
+    pattern = '<\w*/>'
+    found = re.search(pattern, original)
+    if found:
+        return original.replace(found.group(0), edit)
+    
+    return original
 
-    result = sparse.hstack([id_matrix, label_matrix, matrix], format='csr')
+
+def parse_df(df_):
+    # hardcode it for now
+    df = df_.copy(deep=True)
+    df = df['id', 'original', 'edit', 'meanGrade']
+
+    # search for replaced token with regex
+    # todo try except
+    pattern = '<\w*/>'
+    df['edited'] = df.apply(lambda row: replace_anchors(row['original'], row['edit']), axis=1)
+    df = df.drop(columns=['original', 'edit'])
+
+
+def save_matrix(df, matrix, output):
+    id_matrix = sparse.csr_matrix(df['id'].astype(np.int64)).T
+    target_matrix = sparse.csr_matrix(df['meanGrade'].astype(np.int64)).T
+
+    result = sparse.hstack([id_matrix, target_matrix, matrix], format='csr')
 
     msg = 'The output matrix {} size is {} and data type is {}\n'
     sys.stderr.write(msg.format(output, result.shape, result.dtype))
