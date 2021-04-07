@@ -1,0 +1,4 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://sirius-yandex-dvc-sample-project-artifact-registry/dvc-sample-project
