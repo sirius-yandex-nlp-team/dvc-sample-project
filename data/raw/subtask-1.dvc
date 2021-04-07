@@ -1,0 +1,5 @@
+outs:
+- md5: 873e9bc9e50f7fc7f052b668776db81e.dir
+  size: 2365138
+  nfiles: 6
+  path: subtask-1
