@@ -16,6 +16,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 def get_df(data):
     df = pd.read_csv(
         data,
+        header=0,
         encoding='utf-8',
         names=['id', 'original', 'edit', 'scores', 'meanGrade']
     )
@@ -46,11 +47,8 @@ def parse_df(df_):
 
 
 def save_matrix(df, matrix, output):
-    print(type(df['id']))
-    id_matrix = sparse.csr_matrix(df['id'].values.astype(np.int64)).T
-    target_matrix = sparse.csr_matrix(df['meanGrade'].astype(np.int64)).T
-
-    result = sparse.hstack([id_matrix, target_matrix, matrix], format='csr')
+    target_matrix = sparse.csr_matrix(df['meanGrade'].values.astype(np.float64)).T
+    result = sparse.hstack([target_matrix, matrix], format='csr')
 
     msg = 'The output matrix {} size is {} and data type is {}\n'
     sys.stderr.write(msg.format(output, result.shape, result.dtype))
@@ -91,6 +89,7 @@ if __name__ == "__main__":
     # Generate train feature matrix
     df_train = get_df(train_input)
     df_train = parse_df(df_train)
+    print(df_train.shape)
     train_words = np.array(df_train['edited'].str.lower().values.astype('U'))
 
     bag_of_words = CountVectorizer(
@@ -104,6 +103,8 @@ if __name__ == "__main__":
     tfidf = TfidfTransformer(smooth_idf=False)
     tfidf.fit(train_words_binary_matrix)
     train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
+
+    print(type(train_words_tfidf_matrix))
 
     save_matrix(df_train, train_words_tfidf_matrix, train_output)
 

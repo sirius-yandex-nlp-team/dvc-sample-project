@@ -6,29 +6,32 @@ import yaml
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error as MSE
 
-from dvc_sample_project.context import ctx
-from dvc_sample_project.config import params
+#from dvc_sample_project.context import ctx
+#from dvc_sample_project.config import params
 from dvc_sample_project.logger import logger, init_logger
 
-import minikts.api as kts
+#import minikts.api as kts
 
 def train_random_forest(train_matrix):
 
-	seed = params.seed
-	n_est = params.n_est
-	min_split = params.min_split
+	params = yaml.safe_load(open('params.yaml'))['Train_RF']
+	seed = params['seed']
+	n_est = params['n_est']
+	min_split = params['min_split']
+	#seed = params.seed
+	#n_est = params.n_est
+	#min_split = params.min_split
 
 	y = np.squeeze(matrix[:, 1].toarray())
 	X = matrix[:, 2:]
 
-	with kts.parse_stdout(kts.patterns.random_forest, kts.LoggerCallback(logger=logger)):
-		model = RandomForestRegressor(
-		    n_estimators=n_est,
-		    min_samples_split=min_split,
-		    n_jobs=2,
-		    random_state=seed
-		)
-		model.fit(X, y)
+	model = RandomForestRegressor(
+	    n_estimators=n_est,
+	    min_samples_split=min_split,
+	    n_jobs=2,
+	    random_state=seed
+	)
+	model.fit(X, y)
 
 	logger.log_metric("RMSE", MSE(y, model.predict(X), squared=False), dvc=True)
 	logger.dvclive_next_step()
