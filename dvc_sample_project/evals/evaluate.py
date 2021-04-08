@@ -3,52 +3,48 @@ import os
 import pickle
 import json
 
-import sklearn.metrics as metrics
+from sklearn.metrics import mean_squared_error as MSE
 
-if len(sys.argv) != 6:
-    sys.stderr.write('Arguments error. Usage:\n')
-    sys.stderr.write('\tpython evaluate.py model features scores prc roc\n')
-    sys.exit(1)
+from dvc_sample_project.context import ctx
+from dvc_sample_project.config import params
+from dvc_sample_project.logger import logger, init_logger
 
-model_file = sys.argv[1]
-matrix_file = os.path.join(sys.argv[2], 'test.pkl')
-scores_file = sys.argv[3]
-prc_file = sys.argv[4]
-roc_file = sys.argv[5]
+import minikts.api as kts
 
-with open(model_file, 'rb') as fd:
-    model = pickle.load(fd)
 
-with open(matrix_file, 'rb') as fd:
-    matrix = pickle.load(fd)
+def eval_regressor(model, matrix):
+    targets = matrix[:, 1].toarray()
+    X = matrix[:, 2:]
 
-labels = matrix[:, 1].toarray()
-x = matrix[:, 2:]
+    predictions = model.predict(X)
+    rmse = MSE(y, predictions, squared=False)
+    logger.log_metric("test RMSE", rmse, dvc=True)
+    logger.dvclive_next_step()
 
-predictions_by_class = model.predict_proba(x)
-predictions = predictions_by_class[:, 1]
+    return rmse
 
-precision, recall, prc_thresholds = metrics.precision_recall_curve(labels, predictions)
-fpr, tpr, roc_thresholds = metrics.roc_curve(labels, predictions)
 
-avg_prec = metrics.average_precision_score(labels, predictions)
-roc_auc = metrics.roc_auc_score(labels, predictions)
 
-with open(scores_file, 'w') as fd:
-    json.dump({'avg_prec': avg_prec, 'roc_auc': roc_auc}, fd, indent=4)
+if __name__ == "__main__":
 
-with open(prc_file, 'w') as fd:
-    json.dump({'prc': [{
-            'precision': p,
-            'recall': r,
-            'threshold': t
-        } for p, r, t in zip(precision, recall, prc_thresholds)
-    ]}, fd, indent=4)
+    init_logger(tags=['debug'])
 
-with open(roc_file, 'w') as fd:
-    json.dump({'roc': [{
-            'fpr': fp,
-            'tpr': tp,
-            'threshold': t
-        } for fp, tp, t in zip(fpr, tpr, roc_thresholds)
-    ]}, fd, indent=4)
+    if len(sys.argv) != 4:
+        sys.stderr.write('Arguments error. Usage:\n')
+        sys.stderr.write('\tpython evaluate.py model-file features-dir scores-file\n')
+        sys.exit(1)
+
+    model_file = sys.argv[1]
+    matrix_file = os.path.join(sys.argv[2], 'test.pkl')
+    scores_file = sys.argv[3]
+
+    with open(model_file, 'rb') as fd:
+        model = pickle.load(fd)
+
+    with open(matrix_file, 'rb') as fd:
+        matrix = pickle.load(fd)
+    
+    rmse = eval_regressor(model, matrix)
+    
+    with open(scores_file, 'w') as fd:
+        json.dump({'RMSE': rmse}, fd, indent=4)
