@@ -33,3 +33,34 @@ stages:
       logs:
         summary: true
         html: false
+  Featurize_TFIDF:
+    cmd: python3 dvc_sample_project/features/to_tfidf.py data/raw/subtask-1 data/processed/tfidf_features
+    deps:
+    - data/raw/subtask-1
+    - dvc_sample_project/features/to_tfidf.py
+    params:
+    - Featurize_tfidf.max_features
+    - Featurize_tfidf.ngrams
+    outs:
+    - data/processed/tfidf_features
+  Train_RF:
+    cmd: python3 dvc_sample_project/trainers/train_rf.py data/processed/tfidf_features
+      artifacts
+    deps:
+    - data/processed/tfidf_features/train.pkl
+    - dvc_sample_project/trainers/train_rf.py
+    params:
+    - Train_RF.min_split
+    - Train_RF.n_est
+    - Train_RF.seed
+    outs:
+    - artifacts/RF_model.pkl
+  Eval_RF:
+    cmd: python3 dvc_sample_project/evals/evaluate.py artifacts/RF_model.pkl
+      data/processed/tfidf_features artifacts/RF_scores.json
+    deps:
+    - data/processed/tfidf_features/test.pkl
+    - dvc_sample_project/evals/evaluate.py
+    - artifacts/RF_model.pkl
+    outs:
+    - artifacts/RF_scores.json
