@@ -2,6 +2,7 @@ import sys
 import os
 import pickle
 import json
+import dvclive
 
 from sklearn.metrics import mean_squared_error as MSE
 
@@ -9,24 +10,22 @@ from dvc_sample_project.context import ctx
 from dvc_sample_project.config import params
 from dvc_sample_project.logger import logger, init_logger
 
-import minikts.api as kts
-
 
 def eval_regressor(model, matrix):
-    targets = matrix[:, 1].toarray()
-    X = matrix[:, 2:]
+    targets = matrix[:, 0].toarray()
+    X = matrix[:, 1:]
 
     predictions = model.predict(X)
-    rmse = MSE(y, predictions, squared=False)
+    rmse = MSE(targets, predictions, squared=False)
+
+    dvclive.init()
     logger.log_metric("test RMSE", rmse, dvc=True)
     logger.dvclive_next_step()
 
     return rmse
 
 
-
 if __name__ == "__main__":
-
     init_logger(tags=['debug'])
 
     if len(sys.argv) != 4:
@@ -40,7 +39,6 @@ if __name__ == "__main__":
 
     with open(model_file, 'rb') as fd:
         model = pickle.load(fd)
-
     with open(matrix_file, 'rb') as fd:
         matrix = pickle.load(fd)
     
