@@ -3,17 +3,16 @@ import os
 import pickle
 import numpy as np
 import yaml
+import dvclive
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error as MSE
 
-#from dvc_sample_project.context import ctx
-#from dvc_sample_project.config import params
+from dvc_sample_project.context import ctx
+from dvc_sample_project.config import params
 from dvc_sample_project.logger import logger, init_logger
 
-#import minikts.api as kts
 
 def train_random_forest(train_matrix):
-
 	params = yaml.safe_load(open('params.yaml'))['Train_RF']
 	seed = params['seed']
 	n_est = params['n_est']
@@ -22,8 +21,8 @@ def train_random_forest(train_matrix):
 	#n_est = params.n_est
 	#min_split = params.min_split
 
-	y = np.squeeze(matrix[:, 1].toarray())
-	X = matrix[:, 2:]
+	y = np.squeeze(matrix[:, 0].toarray())
+	X = matrix[:, 1:]
 
 	model = RandomForestRegressor(
 	    n_estimators=n_est,
@@ -33,11 +32,11 @@ def train_random_forest(train_matrix):
 	)
 	model.fit(X, y)
 
+	dvclive.init()
 	logger.log_metric("RMSE", MSE(y, model.predict(X), squared=False), dvc=True)
 	logger.dvclive_next_step()
 
 	return model
-
 
 
 if __name__ == "__main__":
