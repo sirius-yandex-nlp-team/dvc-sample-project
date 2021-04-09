@@ -1,0 +1,6 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://sirius-yandex-dvc-sample-project-artifact-registry/dvc-sample-project
+    access_key_id = g69GAXyJNfKWktLvSmjX
+    secret_access_key = wUnTGIxPRWX0ojrZEVnQYrTN_zFeajflv72BW9Vf
